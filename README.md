@@ -11,7 +11,6 @@
 ### To run the command below 
 - You should go to the php-fpm container to run the commands below
 - To do that move to docker and run the command below,
-- Run `cd docker` in new terminal to go the directory where the commands exist, which is docker.
 - Then run `docker exec -it php-fpm /bin/bash`
 
 ### Install all the dependency run
