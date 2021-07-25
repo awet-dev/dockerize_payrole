@@ -1,7 +1,7 @@
 # Pay Role Staff
 
 ### Clone the project from GitHub
-- Clone the project from [git](https://github.com/awet100/pay-sales-staff)
+- Clone the project from [git](https://github.com/awet100/dockerize_payrole)
 - It is public, clone and run the command below
 
 ### After cloning the project, first thing
@@ -42,3 +42,4 @@
 - And the bonus of this month is going to be paid in the mid of the next month 
 - Meaning at 15th of the next month, if it is holiday, it will be postponed to the next wednesday after 15th of the next month
 - This is totally automated and handled by javascript.
+
