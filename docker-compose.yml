@@ -1,28 +1,49 @@
-version: '3.3'
+version: '3.8'
 
 services:
   php-fpm:
     container_name: php-fpm
     build:
-      context: docker/php_fpm
+      context: dockerfiles/php_fpm
+    restart: on-failure
     ports:
       - "5000:8000"
+#    entrypoint: sh /var/www/html/start_app.sh
+    depends_on:
+      - mysql
     volumes:
-      - ../pay-sales-staff:/var/www/html
+      - ./pay-sales-staff:/var/www/html
+    environment:
+      APP_ENV: dev
+      APP_SECRET: 22df1be67132a61321f25f9484f447c6
+      DATABASE_URL: mysql://root:root@mysql:3306/payrollSalesStaff?serverVersion=8.0
+    networks:
+      - symfony
 
   mysql:
-    image: mysql
+    image: mysql:8.0
     container_name: mysql
     command: --default-authentication-plugin=mysql_native_password
-    restart: always
+    restart: on-failure
+    volumes:
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./database/data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: root
+    networks:
+      - symfony
 
   phpmyadmin:
     image: phpmyadmin
-    restart: always
+    restart: on-failure
     ports:
       - "8081:80"
+    depends_on:
+      - mysql
     environment:
       - PMA_ARBITRARY=1
+    networks:
+      - symfony
 
+networks:
+  symfony:

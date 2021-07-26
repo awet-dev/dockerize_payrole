@@ -12,6 +12,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @ORM\Table(name="`user`")
  * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
@@ -59,12 +60,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $salaries;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Supplier::class, mappedBy="user", cascade={"persist", "remove"})
+     */
+    private $supplier;
+
     public function __construct()
     {
         $this->transactions = new ArrayCollection();
         $this->bonuses = new ArrayCollection();
         $this->salaries = new ArrayCollection();
-        $this->setRoles(['ROLE_ADMIN']);
     }
 
     public function getId(): ?int
@@ -260,5 +265,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __toString(): string
     {
         return $this->full_name;
+    }
+
+    public function getSupplier(): ?Supplier
+    {
+        return $this->supplier;
+    }
+
+    public function setSupplier(Supplier $supplier): self
+    {
+        // set the owning side of the relation if necessary
+        if ($supplier->getUser() !== $this) {
+            $supplier->setUser($this);
+        }
+
+        $this->supplier = $supplier;
+
+        return $this;
     }
 }
